@@ -54,12 +54,6 @@ def upsertIntent(   lex,
 
     return lex.put_intent(**args)
 
-def buildBot(lex, name, versionOrAlias = '$LATEST'):
-    """ Run the build command on a bot
-    """
-    print "building bot"
-
-
 def upsertBot(  lex,
                 name,
                 description,
@@ -137,18 +131,6 @@ def findIntentWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
     return None
 
 def upsertBotAndIntents(lex, bot):
-    """ Run the build command on the bot
-    """
-    lexBot = findBotWithRetry(lex, bot['name'], bot['version'])
-
-    botChecksum = None
-    if lexBot:
-        botChecksum = lexBot['checksum']
-
-
-
-
-def upsertBotAndIntents(lex, bot):
     """ Create the bot and the intent(s)
     """
     intents = []
@@ -206,10 +188,6 @@ def main():
     for bot in config['bots']:
         upsertBotAndIntents(lex, bot)
 
-    for bot in config['bots']:
-        buildBot(lex, bot)
-
-
-
 if __name__ == '__main__':
     main()
+
