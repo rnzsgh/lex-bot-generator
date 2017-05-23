@@ -67,7 +67,7 @@ def upsertBot(  lex,
                 clarificationPrompt,
                 abortStatement,
                 checksum = None,
-                processBehavior = 'SAVE',
+                processBehavior = 'BUILD',
                 idleSessionTTLInSeconds = 123,
                 locale = 'en-US',
                 childDirected = False):
@@ -115,9 +115,7 @@ def findIntent(lex, name, versionOrAlias = '$LATEST'):
             return None
         raise ce
 
-
-# TODO: Increase retry to 5
-def findBotWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 1):
+def findBotWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
     """ Find a bot by name/version with retry - returns None if not found after N retries
     """
     for x in range(1, maxRetry+1):
@@ -128,8 +126,7 @@ def findBotWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 1):
 
     return None
 
-# TODO: Increase retry to 5
-def findIntentWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 1):
+def findIntentWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
     """ Find a bot by name/version with retry - returns None if not found after N retries
     """
     for x in range(1, maxRetry+1):
@@ -138,6 +135,18 @@ def findIntentWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 1):
             return response
         time.sleep(x * 2)
     return None
+
+def upsertBotAndIntents(lex, bot):
+    """ Run the build command on the bot
+    """
+    lexBot = findBotWithRetry(lex, bot['name'], bot['version'])
+
+    botChecksum = None
+    if lexBot:
+        botChecksum = lexBot['checksum']
+
+
+
 
 def upsertBotAndIntents(lex, bot):
     """ Create the bot and the intent(s)
@@ -196,6 +205,11 @@ def main():
 
     for bot in config['bots']:
         upsertBotAndIntents(lex, bot)
+
+    for bot in config['bots']:
+        buildBot(lex, bot)
+
+
 
 if __name__ == '__main__':
     main()
