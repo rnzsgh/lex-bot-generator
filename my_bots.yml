@@ -31,7 +31,6 @@ bots:
   - name: 'MyTestBotGuideNextElection'
     version: "$LATEST"
     description: 'My test bot 2'
-
     clarification-prompt:
       messages:
         - content-type: 'PlainText'
