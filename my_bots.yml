@@ -15,19 +15,19 @@ bots:
     intents:
       - name: 'MyTestIntentTime'
         sample-utterances:
-          - 'What time is it?'
-          - 'What time do you have?'
-          - 'What time you got?'
-          - 'What time do you got?'
-          - "What's the time?"
+          - 'What time is it'
+          - 'What time do you have'
+          - 'What time you got'
+          - 'What time do you got'
+          - "What's the time"
           - 'Do you have the time'
       - name: 'MyTestIntentAca'
         sample-utterances:
-          - 'What is ACA?'
-          - 'What is the ACA?'
-          - 'What is the Affordable Care Act?'
-          - 'What is Obamacare?'
-          - "What's Obamacare?"
+          - 'What is ACA'
+          - 'What is the ACA'
+          - 'What is the Affordable Care Act'
+          - 'What is Obamacare'
+          - "What's Obamacare"
   - name: 'MyTestBotGuideNextElection'
     version: "$LATEST"
     description: 'My test bot 2'
@@ -44,17 +44,19 @@ bots:
     intents:
       - name: 'MyTestIntentGuide'
         sample-utterances:
-          - 'What is 42?'
-          - 'What is the meaning of life?'
-          - 'What is the answer to life, the universe and everything?'
-          - 'What is the answer to the great question of Life?'
-          - 'How many roads must a man walk down?'
+          - 'What is forty-two'
+          - 'What does forty two mean'
+          - 'What is the ultimate question'
+          - 'What is the meaning of life'
+          - 'What is the answer to life the universe and everything'
+          - 'What is the answer to the great question of Life'
+          - 'How many roads must a man walk down'
       - name: 'MyTestIntentNextElection'
         sample-utterances:
-          - 'How long until the next Presidential election?'
-          - 'When is the next Presidential election?'
-          - 'How long will the President be in office?'
-          - 'When do we elect a new President?'
-          - 'How long until we elect a new President?'
-          - 'How often do we elect a new President?'
+          - 'How long until the next Presidential election'
+          - 'When is the next Presidential election'
+          - 'How long will the President be in office'
+          - 'When do we elect a new President'
+          - 'How long until we elect a new President'
+          - 'How often do we elect a new President'
 

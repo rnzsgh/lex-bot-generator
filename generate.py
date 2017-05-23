@@ -52,8 +52,6 @@ def upsertIntent(   lex,
     if parentIntentSignature:
         args.update(parentIntentSignature = parentIntentSignature)
 
-    print args
-
     return lex.put_intent(**args)
 
 def buildBot(lex, name, versionOrAlias = '$LATEST'):
@@ -75,7 +73,6 @@ def upsertBot(  lex,
                 childDirected = False):
     """ Upsert a bot
     """
-
     args = dict(
         name = name,
         description = description,
@@ -162,10 +159,6 @@ def upsertBotAndIntents(lex, bot):
     if lexBot:
         botChecksum = lexBot['checksum']
 
-    clarificationPrompt = dict(
-       maxAttempts = bot['clarification-prompt']['max-attempts'],
-    )
-
     clarificationMessages = []
     for message in bot['clarification-prompt']['messages']:
         clarificationMessages.append(
@@ -184,36 +177,25 @@ def upsertBotAndIntents(lex, bot):
             )
         )
 
-    clarificationPrompt = dict(
-        messages = clarificationMessages,
-        maxAttempts = bot['clarification-prompt']['max-attempts'],
-    )
-
-    abortStatement = dict(messages = abortStatementMessages)
-
     lexBot = upsertBot(
         lex,
         bot['name'],
         bot['description'],
         intents,
-        clarificationPrompt,
-        abortStatement,
+        dict(
+            messages = clarificationMessages,
+            maxAttempts = bot['clarification-prompt']['max-attempts'],
+        ),
+        dict(messages = abortStatementMessages),
         botChecksum,
     )
 
-    print lexBot
-
 def main():
     lex = boto3.client('lex-models')
-
     config = loadConfig('my_bots.yml')
 
     for bot in config['bots']:
-        print 'BOT: ' + bot['name'] + ' - upserting'
         upsertBotAndIntents(lex, bot)
-
-        print bot['name']
-
 
 if __name__ == '__main__':
     main()
