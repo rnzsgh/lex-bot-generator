@@ -100,7 +100,7 @@ def findBot(lex, name, versionOrAlias = '$LATEST'):
         raise ce
 
 def findIntent(lex, name, versionOrAlias = '$LATEST'):
-    """ Find a bot by name/version or None is returned if not found
+    """ Find an intent by name/version or None is returned if not found
     """
     try:
         return lex.get_intent(name = name, version = versionOrAlias)
@@ -121,7 +121,7 @@ def findBotWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
     return None
 
 def findIntentWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
-    """ Find a bot by name/version with retry - returns None if not found after N retries
+    """ Find an intent by name/version with retry - returns None if not found after N retries
     """
     for x in range(1, maxRetry+1):
         response = findIntent(lex, name, versionOrAlias)
