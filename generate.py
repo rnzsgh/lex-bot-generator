@@ -110,7 +110,7 @@ def findIntent(lex, name, versionOrAlias = '$LATEST'):
     return findLexItem(lex.get_intent, dict(name = name, version = versionOrAlias))
 
 def findLexItemWithRetry(lex, findFunction, maxRetry = 2, *args):
-    """ Find a bot or entry by args with retry - returns None if not found after N retries
+    """ Find a bot or intent by args with retry - returns None if not found after N retries
     """
     for x in range(1, maxRetry+1):
         response = findFunction(lex, *args)
