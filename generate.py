@@ -92,8 +92,13 @@ def upsertBot(  lex,
 def findBot(lex, name, versionOrAlias = '$LATEST'):
     """ Find a bot by name/version or None is returned if not found
     """
+    return findLexItem(lex.get_bot, dict(name = name, versionOrAlias = versionOrAlias))
+
+def findLexItem(findFunction, args):
+    """ Find an intent of bot by name/version or None is returned if not found
+    """
     try:
-        return lex.get_bot(name = name, versionOrAlias = versionOrAlias)
+        return findFunction(**args)
     except botocore.exceptions.ClientError as ce:
         if ce.response['Error']['Code'] == 'NotFoundException':
             return None
@@ -102,33 +107,27 @@ def findBot(lex, name, versionOrAlias = '$LATEST'):
 def findIntent(lex, name, versionOrAlias = '$LATEST'):
     """ Find an intent by name/version or None is returned if not found
     """
-    try:
-        return lex.get_intent(name = name, version = versionOrAlias)
-    except botocore.exceptions.ClientError as ce:
-        if ce.response['Error']['Code'] == 'NotFoundException':
-            return None
-        raise ce
+    return findLexItem(lex.get_intent, dict(name = name, version = versionOrAlias))
+
+def findLexItemWithRetry(lex, findFunction, maxRetry = 2, *args):
+    """ Find a bot or entry by args with retry - returns None if not found after N retries
+    """
+    for x in range(1, maxRetry+1):
+        response = findFunction(lex, *args)
+        if response:
+            return response
+        time.sleep(x * 2)
+    return None
 
 def findBotWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
     """ Find a bot by name/version with retry - returns None if not found after N retries
     """
-    for x in range(1, maxRetry+1):
-        response = findBot(lex, name, versionOrAlias)
-        if response:
-            return response
-        time.sleep(x * 2)
-
-    return None
+    return findLexItemWithRetry(lex, findBot, maxRetry, name, versionOrAlias)
 
 def findIntentWithRetry(lex, name, versionOrAlias = '$LATEST', maxRetry = 2):
     """ Find an intent by name/version with retry - returns None if not found after N retries
     """
-    for x in range(1, maxRetry+1):
-        response = findIntent(lex, name, versionOrAlias)
-        if response:
-            return response
-        time.sleep(x * 2)
-    return None
+    return findLexItemWithRetry(lex, findIntent, maxRetry, name, versionOrAlias)
 
 def upsertBotAndIntents(lex, bot):
     """ Create the bot and the intent(s)
